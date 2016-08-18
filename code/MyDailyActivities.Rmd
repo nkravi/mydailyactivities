@@ -1,0 +1,131 @@
+---
+title: "My Daily Activities"
+output: 
+  flexdashboard::flex_dashboard:
+    social: menu
+    source_code: embed 
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(ggplot2)
+library(dplyr)
+library(plotrix)
+```
+
+
+```{r dataimport, include=FALSE}
+dat_fitbit <- read.csv('fitbit1.csv',header = T,stringsAsFactors=F)
+dat_sleep <- read.csv('sleep.csv',header = T,stringsAsFactors = F)
+dat_websites <- read.csv('websites.csv',header = T,stringsAsFactors = F)
+```
+
+
+```{r datacleansing, include=FALSE}
+dat_fitbit$Date <- as.Date(dat_fitbit$Date,format = '%m/%d/%Y')
+dat_sleep$Date <- as.Date(dat_sleep$Date,format = '%m/%d/%Y')
+dat_websites$Date <- as.Date(dat_websites$Date,format = '%m/%d/%Y')
+dat_websites$Website <- as.factor(dat_websites$Website)
+```
+
+
+
+
+FitBit
+=======================================================================
+
+### Number of steps I walk daily
+
+```{r}
+shinyApp(
+  ui = fillPage(
+    fillCol(flex = c(NA, 1), 
+      inputPanel(
+        dateRangeInput("daterange", "Date range:",
+               start = "2016-07-01",
+               end   = "2016-08-15")
+      ),
+      plotOutput("fitbitplot", height = "100%")
+    )
+  ),
+  server = function(input, output) {
+    output$fitbitplot <- renderPlot({
+      ggplot(dat_fitbit[dat_fitbit$Date >input$daterange[1] & 
+                          dat_fitbit$Date <input$daterange[2],], aes(Date, steps)) +
+        geom_line(color='green', size=2) +
+        xlab("") + ylab("Daily Steps")
+    })
+  },
+  options = list(height = 600)
+)
+```
+
+Website
+=======================================================================
+
+### Time spent on Each Website
+
+```{r}
+getData <- function(input){
+  if(input == 'all'){
+    return(dat_websites)
+  }else{
+    return(dat_websites[dat_websites$Website==input,])
+  }
+}
+shinyApp(
+  ui = fillPage(
+    fillCol(flex = c(NA, 1), 
+      inputPanel(
+        selectInput("webchoice", label = "Website:",
+            choices =  c("all",levels(dat_websites$Website)), selected = "all")
+      ),
+      plotOutput("websiteplot", height = "100%")
+    )
+  ),
+  server = function(input, output) {
+    output$websiteplot <- renderPlot({
+      ggplot(getData(input$webchoice), aes(Date, Hours)) +
+        geom_line(aes(color=Website)) +
+        xlab("") + ylab("# hours")
+    })
+  },
+  options = list(height = 600)
+)
+```
+
+Sleep
+=======================================================================
+
+### Number of hours slept each day
+
+```{r}
+getData <- function(input){
+  if(input == 'all'){
+    return(dat_websites)
+  }else{
+    return(dat_websites[dat_websites$Website==input,])
+  }
+}
+shinyApp(
+  ui = fillPage(
+    fillCol(flex = c(NA, 1), 
+      inputPanel(
+        sliderInput("sleep_time", label = "Hours less than:",
+            min = 0 , max = 14, value = 14, step = 0.5)
+      ),
+      plotOutput("sleepplot", height = "100%")
+    )
+  ),
+  server = function(input, output) {
+    output$sleepplot <- renderPlot({
+      ggplot(dat_sleep[dat_sleep$Sleep_time<input$sleep_time,], aes(Date, Sleep_time)) +
+        geom_point(size=3,color="red")  +
+        geom_line(color='steelblue', size=2) +
+        xlab("") + ylab("# Hours")
+    })
+  },
+  options = list(height = 600)
+)
+```
