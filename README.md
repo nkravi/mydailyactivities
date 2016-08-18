@@ -16,9 +16,11 @@
 * Time Tracker
 * Sleep Time
 
-**Fit Bit** - measures steps I walked each day
-**Time Tracker** - Tracks usage time of various webpages I use
-**Sleep Time** - Sleep time calculates hours I have slept
+**Fit Bit** - measures steps I walked each day.
+
+**Time Tracker** - Tracks usage time of various webpages I use.
+
+**Sleep Time** - Sleep time calculates hours I have slept.
 
 ### Data Preprocessing
 
