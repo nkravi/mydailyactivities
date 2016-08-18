@@ -40,5 +40,6 @@
 
 ### Hosting
 
-> The app is hosted on (shiny server)[https://nkdataviz.shinyapps.io/shinyapp/] 
+> The app is hosted on shiny server 
+(link to the app)[https://nkdataviz.shinyapps.io/shinyapp/] 
 
