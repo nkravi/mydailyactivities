@@ -1,6 +1,6 @@
 # My Daily Activities
 
-[Click to open the app](https://nkdataviz.shinyapps.io/shinyapp/)
+[My App](https://nkdataviz.shinyapps.io/shinyapp/)
 
 
 ### Project scope
@@ -40,5 +40,5 @@
 
 ### Hosting
 
-> The app is hosted on shiny server 
+> The app is hosted on (shiny server)[https://nkdataviz.shinyapps.io/shinyapp/] 
 
